@@ -1,4 +1,4 @@
-package it.unicam.cs.asdl2526.es1;
+package it.unicam.cs.asdl2526.es1sol;
 
 /**
  * Un oggetto di questa classe rappresenta le soluzioni di una certa equazione

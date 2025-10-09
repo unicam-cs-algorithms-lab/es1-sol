@@ -1,4 +1,4 @@
-package it.unicam.cs.asdl2526.es1;
+package it.unicam.cs.asdl2526.es1sol;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,15 +9,7 @@ import java.io.InputStreamReader;
  * logic</i> che risolvono le equazioni di secondo grado, in particolare le
  * classi EquazioneSecondoGradoModificabileConRisolutore e
  * SoluzioneEquazioneSecondoGrado.
- * 
- * ATTENZIONE! C'è un bug da trovare
- * 
- * fare il debug e modificare il codice in modo che non vada in loop se
- * l'inserimento del parametro a o degli altri parametri richiede almeno una
- * retry. Indicare con i commenti ... DOVE è stato modificato il file originale
- * e perché.
  *
- * 
  * @author Luca Tesei
  */
 public class EquazioniModificabiliTextualFrontEnd {
@@ -38,7 +30,9 @@ public class EquazioniModificabiliTextualFrontEnd {
             // leggo il parametro a
             boolean retry = false;
             do {
-
+                // se il do ha fatto almeno un ciclo perché retry era true, lo
+                // rimetto a false
+                retry = false;
                 System.out.println(
                         "Inserisci il valore del parametro a e premi INVIO");
                 try {
@@ -60,7 +54,11 @@ public class EquazioniModificabiliTextualFrontEnd {
                 }
             } while (retry);
             // leggo il parametro b
+            // sicuramente qui retry == false;
             do {
+                // se il do ha fatto almeno un ciclo perché retry era true, lo
+                // rimetto a false
+                retry = false;
                 System.out.println(
                         "Inserisci il valore del parametro b e premi INVIO");
                 try {
@@ -76,7 +74,11 @@ public class EquazioniModificabiliTextualFrontEnd {
                 }
             } while (retry);
             // leggo il parametro c
+            // sicuramente qui retry == false;
             do {
+                // se il do ha fatto almeno un ciclo perché retry era true, lo
+                // rimetto a false
+                retry = false;
                 System.out.println(
                         "Inserisci il valore del parametro c e premi INVIO");
                 try {

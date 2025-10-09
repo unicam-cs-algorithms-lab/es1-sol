@@ -1,7 +1,7 @@
 /**
  * 
  */
-package it.unicam.cs.asdl2526.es1;
+package it.unicam.cs.asdl2526.es1sol;
 
 /**
  * Un oggetto di questa classe permette di rappresentare una equazione di
@@ -13,8 +13,7 @@ package it.unicam.cs.asdl2526.es1;
  * <code>isSolved()</code>. Qualora la soluzione corrente non esista e si tenti
  * di ottenerla verrà lanciata una eccezione.
  * 
- * @author Template: Luca Tesei, Implementation: Collettiva da Esercitazione a
- *         Casa
+ * @author Luca Tesei
  *
  */
 public class EquazioneSecondoGradoModificabileConRisolutore {
@@ -51,7 +50,15 @@ public class EquazioneSecondoGradoModificabileConRisolutore {
      */
     public EquazioneSecondoGradoModificabileConRisolutore(double a, double b,
             double c) {
-        // TODO implementare
+        if (Math.abs(a) < EPSILON) // controllo se uguale a zero
+            throw new IllegalArgumentException("L'equazione di secondo grado"
+                    + " non può avere coefficiente a uguale a zero");
+        this.a = a;
+        this.b = b;
+        this.c = c;
+        this.solved = false; // all'inizio l'equazione non è risolta
+        this.lastSolution = null; // all'inizion non viene calcolata nessuna
+                                  // soluzione
     }
 
     /**
@@ -71,7 +78,11 @@ public class EquazioneSecondoGradoModificabileConRisolutore {
      *                                      se il nuovo valore è zero
      */
     public void setA(double a) {
-        // TODO implementare
+        if (Math.abs(a) < EPSILON) // controllo se uguale a zero
+            throw new IllegalArgumentException("L'equazione di secondo grado"
+                    + " non può avere coefficiente a uguale a zero");
+        this.a = a;
+        this.solved = false;
     }
 
     /**
@@ -89,7 +100,8 @@ public class EquazioneSecondoGradoModificabileConRisolutore {
      *              il nuovo valore del parametro b
      */
     public void setB(double b) {
-        // TODO implementare
+        this.b = b;
+        this.solved = false;
     }
 
     /**
@@ -107,7 +119,8 @@ public class EquazioneSecondoGradoModificabileConRisolutore {
      *              il nuovo valore del parametro c
      */
     public void setC(double c) {
-        // TODO implementare
+        this.c = c;
+        this.solved = false;
     }
 
     /**
@@ -125,7 +138,33 @@ public class EquazioneSecondoGradoModificabileConRisolutore {
      * risolta di nuovo.
      */
     public void solve() {
-        // TODO implementare
+        if (this.solved)
+            return; // se l'equazione è già stata risolta non fa nulla
+        // risolve l'equazione
+        double delta = this.b * this.b - 4 * this.a * this.c;
+        // controllo i tre casi delta
+        if (Math.abs(delta) < EPSILON)
+            // caso delta == 0
+            // ritorna la soluzione con due valori coincidenti
+            this.lastSolution = new SoluzioneEquazioneSecondoGrado(
+                    new EquazioneSecondoGrado(this.a, this.b, this.c),
+                    (-this.b) / (2 * this.a));
+        else if (delta < 0)
+            // caso delta < 0
+            // ritorna la soluzione vuota
+            this.lastSolution = new SoluzioneEquazioneSecondoGrado(
+                    new EquazioneSecondoGrado(this.a, this.b, this.c));
+        else {
+            // caso delta > 0
+            double tmp = Math.sqrt(delta);
+            // salva la soluzione con due valori distinti
+            this.lastSolution = new SoluzioneEquazioneSecondoGrado(
+                    new EquazioneSecondoGrado(this.a, this.b, this.c),
+                    (-this.b + tmp) / (2 * this.a),
+                    (-this.b - tmp) / (2 * this.a));
+        }
+        // mette a true il flag solved
+        this.solved = true;
     }
 
     /**
@@ -140,8 +179,10 @@ public class EquazioneSecondoGradoModificabileConRisolutore {
      *                                   almeno uno dei parametri
      */
     public SoluzioneEquazioneSecondoGrado getSolution() {
-        // TODO implementare
-        return null;
+        if (!this.solved)
+            throw new IllegalStateException(
+                    "Richiesta di soluzione di equazione non risolta");
+        return this.lastSolution;
     }
 
 }
