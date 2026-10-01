@@ -118,6 +118,22 @@ public class EquazioneSecondoGrado
         int result = 1;
         long temp;
         temp = Double.doubleToLongBits(a);
+        // Combina con XOR i 32 bit alti e i 32 bit bassi del long,
+        // ottenendo un valore int a cui contribuiscono tutti i 64 bit.
+        /*
+                       long temp (64 bit)
+        ┌──────────────┬──────────────┐
+        │  32 bit ALTI │ 32 bit BASSI │
+        └──────────────┴──────────────┘
+                │              │
+                └────── XOR ───┘
+                       │
+                       ▼
+                    32 bit
+                       │
+                    (int)
+         */
+        result = prime * result + (int) (temp ^ (temp >>> 32));
         result = prime * result + (int) (temp ^ (temp >>> 32));
         temp = Double.doubleToLongBits(b);
         result = prime * result + (int) (temp ^ (temp >>> 32));
@@ -131,9 +147,12 @@ public class EquazioneSecondoGrado
      * lessicografico dei coefficienti: prima {@code a}, poi {@code b}, infine
      * {@code c}.
      * <p>
-     * L'implementazione usa {@link Double#compare(double, double)} in modo da
-     * mantenere il confronto coerente con il criterio di uguaglianza adottato
-     * dalla classe anche per valori particolari di tipo {@code double}.
+     * Il confronto dei coefficienti usa {@link Double#compare(double, double)}.
+     * In questo modo l'ordinamento è coerente con il criterio adottato da
+     * {@link #equals(Object)} anche per valori particolari di tipo
+     * {@code double}, come {@code 0.0}, {@code -0.0} e {@code NaN}.
+     * In particolare, {@code compareTo} restituisce zero se e solo se le due
+     * equazioni sono considerate uguali da {@code equals}.
      *
      * @param o equazione con cui effettuare il confronto
      * @return un valore negativo se questa equazione precede {@code o}, zero se
